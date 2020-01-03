@@ -1,3 +1,4 @@
+![Terminal](https://i.imgur.com/fiYM69F.png)
 # Linkpy
 Application made with <3 in Python which crawls websites for links.
 
