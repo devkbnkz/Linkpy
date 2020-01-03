@@ -25,6 +25,14 @@ class Application:
 
 app = Application()
 
+@repl.command('exit')
+def exit_command():
+    exit()
+
+@repl.command('clear')
+def clear_command():
+    _ = os.system('clear')
+
 @repl.command('set')
 def set_command(variable: str, value: str):
     if variable == 'TARGET':
@@ -33,18 +41,24 @@ def set_command(variable: str, value: str):
 
 @repl.command('run')
 def run_command():
-    if app.target is not None:
-        repl.info('Fetching %s' % app.target)
-        response = requests.get(app.target)
-        if response.status_code == 200:
-            repl.info('Searching for links...')
-            soup = BeautifulSoup(response.content, features='html.parser')
-            # <a> http
-            for link in soup.findAll('a', attrs={'href': re.compile("^http://")}):
-                repl.success('Found: %s' % link['href'])
+    try:
+        if app.target is not None:
+            repl.info('Fetching %s' % app.target)
+            response = requests.get(app.target, headers={'User-Agent': 'XY'})
+            if response.status_code == 200:
+                repl.info('Searching for links...')
+                soup = BeautifulSoup(response.content, features='html.parser')
+                # <a> http
+                for link in soup.findAll('a', attrs={'href': re.compile("^http://")}):
+                    repl.success('Found: %s' % link['href'])
+                # <a> https
+                for link in soup.findAll('a', attrs={'href': re.compile("^https://")}):
+                    repl.success('Found: %s' % link['href'])
+            else:
+                repl.error('Failed to fetch %s' % app.target)
         else:
-            repl.error('Failed to fetch %s' % app.target)
-    else:
-        repl.error('TARGET is None. Please set the TARGET. Use: set TARGET <argument>')
+            repl.error('TARGET is None. Please set the TARGET. Use: set TARGET <argument>')
+    except KeyboardInterrupt:
+        repl.info('')
 
 repl.run()
