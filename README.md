@@ -1,7 +1,7 @@
-![Terminal](https://i.imgur.com/vy5RXk5.png)
 # Linkpy
-Application made with <3 in Python which crawls websites for links.
+Application made with <3 in Python which crawls websites for links.  
 
+![Terminal](https://i.imgur.com/7W9VdJJ.png)
 ## Install
 1. Clone.
 ```
